@@ -1,13 +1,14 @@
 /**
- @Name : jeBox v1.2 弹层组件
+ @Name : jeBox v1.3 弹层组件
  @Author: chen guojun
- @Date: 2016-10-12
+ @Date: 2017-03-20
  @QQ群：516754269
- @官网：http://www.jayui.com/jebox/ 或 https://github.com/singod/jeBox
+ @官网：http://www.jemui.com/jebox/ 或 https://github.com/singod/jeBox
  */
 ;(function(root, factory) {
-    if (typeof define === 'function' && define.amd) { //amd
-        define(['$'], factory);
+    //amd
+    if (typeof define === 'function' && define.amd) {
+        define(['jquery'], factory);
     } else if (typeof exports === 'object') { //umd
         module.exports = factory();
     } else {
@@ -20,73 +21,59 @@
     Jeb.endfun = {};
     //缓存常用字符
     var doms = ["jeBox", ".jeBox-wrap", ".jeBox-header", ".jeBox-content", ".jeBox-footer", ".jeBox-close", ".jeBox-maxbtn"];
-    var config = {
-        cell: "",   // 独立ID,用于控制弹层唯一标识
-        title: "提示信息"  // 标题,参数一：提示文字，参数二：提示条样式  ["提示信息",{color:"#ff0000"}]
-        //content: "暂无内容！",  // 内容
-        //boxStyle: {},  //设置弹层的样式
-        //closeBtn: true,   // 标题上的关闭按钮
-        //maxBtn: false,  //是否开启最大化按钮
-        //area: "auto",  // 参数一：弹层宽度，参数二： 弹层高度
-        //padding: "5px",  // 自定义边距
-        //offset: ["auto", "auto"],  //坐标轴
-        //type: 1,  // 显示基本层类型
-        //icon: 0,  // 图标,信息框和加载层的私有参数
-        //button: [],  // 各按钮
-        //btnAlign:"right",  //btnAlign 按钮对齐方式  left center right
-        //yesBtn:"确定",
-        //noBtn:"取消",
-        //yesfun: null,  // 确定按钮回调方法
-        //nofun: null,  // 取消和关闭按钮触发的回调
-        //time: 0,   // 自动关闭时间(秒),0表示不自动关闭
-        //masklock: true,  // 是否开启遮罩层
-        //maskClose: true,   // 点击遮罩层是否可以关闭
-        //maskColor: ["#000", .5],  // 参数一：遮罩层颜色，参数二：遮罩层透明度
-        //isDrag: true,   // 是否可以拖拽
-        //fixed: true,  // 是否静止定位
-        //zIndex: 9999,  // 弹层层级关系
-        //scrollbar: true,  // 是否允许浏览器出现滚动条
-        //shadow: true,  //拖拽风格
-        //success: null,  // 层弹出后的成功回调方法
-        //endfun: null
-    };
+
     function jeDialog(options){
+        var config = {
+            cell: "",   // 独立ID,用于控制弹层唯一标识
+            title: "提示信息",  // 标题,参数一：提示文字，参数二：提示条样式  ["提示信息",{color:"#ff0000"}]
+            content: "暂无内容！",  // 内容
+            boxStyle: {},  //设置弹层的样式
+            closeBtn: true,   // 标题上的关闭按钮
+            closefun:null,
+            maxBtn: false,  //是否开启最大化按钮
+            boxSize: ["auto","auto"],  // 参数一：弹层宽度，参数二： 弹层高度
+            padding: "5px",  // 自定义边距
+            offset: ["auto", "auto"],  //坐标轴
+            type: 1,  // 显示基本层类型
+            icon: 0,  // 图标,信息框和加载层的私有参数
+            button: [],  // 各按钮
+            btnAlign:"right",  //btnAlign 按钮对齐方式  left center right
+            time: 0,   // 自动关闭时间(秒),0表示不自动关闭
+            masklock: true,  // 是否开启遮罩层
+            maskClose: true,   // 点击遮罩层是否可以关闭
+            maskColor: ["#000", .5],  // 参数一：遮罩层颜色，参数二：遮罩层透明度
+            isDrag: true,   // 是否可以拖拽
+            fixed: true,  // 是否静止定位
+            zIndex: 9999,  // 弹层层级关系
+            scrollbar: false,  // 是否允许浏览器出现滚动条
+            shadow: true,  //拖拽风格
+            success: null,  // 层弹出后的成功回调方法
+            endfun: null
+        };
         var that = this;
-        that.config = options;
+        that.config = $.extend(true,config, options || {})
         that.index = (that.config.cell == "" || that.config.cell == undefined) ? ++jeBox.index : that.config.cell ;
         that.initView();
     }
     var jefn = jeDialog.prototype;
     jefn.initView = function(){
         var that = this, opts = that.config;
-        Jeb.scrollbar = opts.scrollbar || false;
+        Jeb.scrollbar = opts.scrollbar;
         //判断ID是否已经存在
         if (opts.cell != "" && $("#" + doms[0] + that.index).size()>0) return;
         //创建按钮模板
+        var arrButton = opts.button, btnLen = arrButton.length;
         var btnHtml = function () {
-            var i = 0, arrButton = opts.button || [], btnLen = arrButton.length,
-                unyesBtn = (opts.yesBtn != undefined && opts.yesBtn != ""),
-                unnoBtn = (opts.noBtn != undefined && opts.noBtn != ""),
-                yesArr = {name:opts.yesBtn}, noArr = {name:opts.noBtn};
-            var butArr = [],comBtnArr;
-            if(unyesBtn && unnoBtn) {
-                comBtnArr = btnLen != 0 ? [yesArr,noArr,arrButton] : [yesArr,noArr];
-            }else if(unyesBtn){
-                comBtnArr = btnLen != 0 ? [yesArr,arrButton] : [yesArr];
-            }else if(unnoBtn){
-                i = 1; comBtnArr = btnLen != 0 ? [noArr,arrButton] : [noArr];
-            }
-            that.button = comBtnArr;
-            var btnStrA = comBtnArr ? function () {
-                for (;i < comBtnArr.length; i++) {
-                    var isDisabled = comBtnArr[i].disabled == true ? "disabled" : "";
-                    butArr.push('<button type="button" class="jeBox-btn' + i + '" jebtn="' + i + '" ' + isDisabled + ">" + comBtnArr[i].name + "</button>");
-                }
-                return butArr.reverse().join("");
-            }() : "";
-            return '<div class="jeBox-footer" style="text-align:'+(opts.btnAlign||"right")+'">' + btnStrA + "</div>";
+            var btnStrs = btnLen != 0 ? function () {
+                    var btnArr = [];
+                    $.each(arrButton,function (i,val) {
+                        btnArr.push('<button type="button" class="jeBox-btn' + i + '" jebtn="'+i+'" '+(val.disabled == true ? "disabled" : "")+'>'+val.name+'</button>');
+                    });
+                    return btnArr.join("");
+                }() : "";
+            return '<div class="jeBox-footer">' + btnStrs + "</div>";
         }();
-        var paddings = opts.padding || "5px", skinCell = opts.skinCell || "jeBox-anim";
+        var paddings = opts.padding, skinCell = opts.skinCell || "jeBox-anim";
         //创建默认的弹出层内容模板
         var templates = '<span class="jeBox-headbtn"><a href="javascript:;" class="jeBox-maxbtn" title="最大化"></a><a href="javascript:;" class="jeBox-close" title="&#20851;&#38381;"></a></span>' + '<div class="jeBox-header"></div>' + '<div class="jeBox-content" style="padding:' + (paddings != "" ? paddings : 0) + ';"></div>' + btnHtml;
         //创建弹窗外部DIV
@@ -96,35 +83,34 @@
                 maxZindex = Math.max(maxZindex, $(this).css("z-index"));
             });
             return maxZindex;
-        }, zIndexs = opts.zIndex || 9999;
+        }, zIndexs = opts.zIndex;
         //计算层级并置顶
         var Zwarp = $(doms[1]).size() > 0 ? getZindex($(doms[1])) + 5 : zIndexs + 5, Zmask = $(doms[1]).size() > 0 ? getZindex($(doms[1])) + 2 : zIndexs,
             divBoxs = $("<div/>",{"id":doms[0] + that.index,"class":doms[1].replace(/\./g, "")});
         $("body").append(divBoxs.append(templates));
         divBoxs.attr("jeitem", that.index);
-        divBoxs.css({position: Jeb.isBool(opts.fixed) ? "fixed" : "absolute","z-index":Zwarp});
+        divBoxs.css({position: opts.fixed ? "fixed" : "absolute","z-index":Zwarp});
         (parseInt(ieBrowser) < 9) ? divBoxs.addClass("jeBox-ies") : divBoxs.addClass(skinCell);
         //是否开启遮罩层
-        if (Jeb.isBool(opts.masklock)) {
-            var maskBox = $("<div/>",{"id":"jemask" + that.index,"class":"jeBox-mask"}), maskColor = opts.maskColor || ["#333", 0.5];
+        if (opts.masklock) {
+            var maskBox = $("<div/>",{"id":"jemask" + that.index,"class":"jeBox-mask"}), maskColor = opts.maskColor;
             $("body").append(maskBox);
             maskBox.css({left:0,top:0,"background-color":maskColor[0] ,"z-index":Zmask,opacity:maskColor[1],filter:"alpha(opacity="+maskColor[1] * 100+")"})
         };
         var thatID = $("#" + doms[0] + that.index),titles = opts.title == false ? "" : (opts.title || config.title),
-            titType = typeof titles === "object", isTitle =  titles ? (titType ? titles[0] : titles) : "",
-            isBtn = (opts.yesBtn === undefined && opts.noBtn === undefined && opts.button === undefined) ? true : false;
+            titType = typeof titles === "object", isTitle =  titles ? (titType ? titles[0] : titles) : "";
         thatID.find(doms[2]).html(isTitle).css({ "display": isTitle != "" ? "" : "none", "height":  isTitle != "" ? "" : "0px" }).css(titType ? titles[1] : {});
-        thatID.find(doms[4]).css({"display": isBtn ? "none" : "", "height": isBtn ? "0px" : ""});
-        thatID.find(doms[5]).css("display", Jeb.isBool(opts.closeBtn) ? "" : "none");
+        thatID.find(doms[4]).css({"display": btnLen != 0 ? "block" : "none", "text-align": opts.btnAlign});
+        thatID.find(doms[5]).css("display", opts.closeBtn ? "" : "none");
         thatID.find(doms[6]).css("display", opts.maxBtn ? "" : "none");
         !Jeb.scrollbar && $("body").css("overflow", "hidden");
         that.setContent(opts); that.setSize(opts, thatID);
         that.setPosition(opts, thatID);
         that.btnCallback(opts, thatID);
         //是否可拖动
-        if (Jeb.isBool(opts.isDrag) && isTitle != "") {
+        if (opts.isDrag && isTitle != "") {
             var wrapCell = thatID, titCell = thatID.find(doms[2]);
-            that.dragLayer(wrapCell, titCell, 0.4, Jeb.isBool(opts.shadow));
+            that.dragLayer(wrapCell, titCell, 0.4, opts.shadow);
         };
         setTimeout(function () {
             opts.success && opts.success(thatID, that.index);
@@ -132,12 +118,12 @@
     };
     //设置内容
     jefn.setContent = function(opts){
-        var that = this, conCell = $("#" + doms[0] + that.index).find(doms[3]), msg = opts.content, isType = opts.type || 1, icons = opts.icon || 0,
-            conType = typeof msg === "object", iconMsg = '<div class="jeBox-iconbox jeicon' + opts.icon + '">' + msg + "</div>";
+        var that = this, conCell = $("#" + doms[0] + that.index).find(doms[3]), msg = opts.content, isType = opts.type, icons = opts.icon,
+            conType = typeof msg === "object", iconMsg = '<div class="jeBox-iconbox jeicon' + icons + '">' + msg + "</div>";
         switch (isType) {
             case 1:
                 if (typeof msg === "string") {
-                    conCell.html(opts.icon !== 0 ? iconMsg : msg);
+                    conCell.html(icons !== 0 ? iconMsg : msg);
                 } else if (msg[0] && msg[0].nodeType === 1) {
                     $("#" + doms[0] + that.index).attr("jenode",msg.selector.toString());
                     //查询传入的位置
@@ -162,7 +148,7 @@
     };
     //设置弹层尺寸
     jefn.setSize = function(opts, cell){
-        var that = this, fixW, fixH,  wrapWidth, wrapHeight, conWidth, conHeight, conCell = cell.find(doms[3]), areas = opts.areaSize || ["auto","auto"],
+        var that = this, fixW, fixH,  wrapWidth, wrapHeight, conWidth, conHeight, conCell = cell.find(doms[3]), areas = opts.boxSize,
             conPad = function(prop){ return parseInt(conCell.css(prop).replace(regPxe, ""))}, winW = $(window).width(), winH = $(window).height(),
             conhead = Jeb.conhead = cell.find(doms[2]).height(), confoot = Jeb.confoot = cell.find(doms[4]).height(),
             Padtb = conPad("padding-top") + conPad("padding-bottom"), Padlr = conPad("padding-left") + conPad("padding-right"),
@@ -176,11 +162,11 @@
                 nPerH = bfH >= winH ? winH : bfH;
             //设置层的宽度
             if ($.type(fixW) === "number") {
-                wrapWidth = bfW;
-                conWidth = bfW - Padlr - Marlr;
+                wrapWidth = bfW + Padlr + Marlr;
+                conWidth = bfW;
             } else if (fixW == "auto") {
-                wrapWidth = cell.outerWidth();
-                conWidth = cell.outerWidth() - Padlr - Marlr;
+                wrapWidth = cell.outerWidth(true) + Padlr + Marlr;
+                conWidth = cell.outerWidth(true);
             } else {
                 wrapWidth = nPerW;
                 conWidth = nPerW - Padlr - Marlr;
@@ -188,11 +174,11 @@
 
             //设置层的高度
             if ($.type(fixH) === "number") {
-                wrapHeight = bfH;
-                conHeight = bfH - Padtb - Martb - conhead - confoot;
+                wrapHeight = bfH + Padtb + Martb;
+                conHeight = bfH - conhead - confoot;
             } else if (fixH == "auto") {
-                wrapHeight = cell.outerHeight();
-                conHeight = cell.outerHeight() - Padtb - Martb - conhead - confoot;
+                wrapHeight = cell.outerHeight(true);
+                conHeight = cell.outerHeight(true) - Padtb - Martb - conhead - confoot;
             } else {
                 wrapHeight = nPerH;
                 conHeight = nPerH - Padtb - Martb - conhead - confoot;
@@ -200,13 +186,13 @@
         };
 
         opts.maxBtn && cell.attr("area", [wrapWidth, wrapHeight, conWidth, conHeight]);
-        cell.css({"width": wrapWidth, height: wrapHeight}).css(opts.boxStyle||{});
+        cell.css({"width": wrapWidth, height: wrapHeight}).css(opts.boxStyle);
         cell.find(doms[3]).css({"width": conWidth, "height": conHeight});
         return that;
     };
     //定位层显示的位置
     jefn.setPosition = function(opts, cell){
-        var that = this, Postr, elemtr, elembl, offsets = opts.offset || ["auto", "auto"],
+        var that = this, Postr, elemtr, elembl, offsets = opts.offset,
             isOffsetArr = $.isArray(offsets), eleW = cell.width(), eleH = cell.height(),
             Postr = offsets[0], Posbl = offsets[1], winWidth =  $(window).width(), winHeight = $(window).height();
         //设置位置
@@ -223,18 +209,20 @@
     };
     //各关闭按钮的事件
     jefn.btnCallback = function (opts, cell) {
-        var that = this, maxBtn = cell.find(doms[6]), times = opts.time || 0, offsets = opts.offset || ["auto", "auto"];
+        var that = this, maxBtn = cell.find(doms[6]),
+            times = opts.time, btns = opts.button,
+            offsets = opts.offset;
         //自动关闭
         times <= 0 || setTimeout(function () {
             jeBox.close(that.index);
         }, times * 1e3);
-        function cancel() {
-            var close = opts.nofun && opts.nofun(that.index);
+        function CloseFun() {
+            var close = opts.closefun && opts.closefun(that.index);
             close === false || jeBox.close(that.index);
         }
 
         //关闭按钮事件
-        Jeb.isBool(opts.closeBtn) && cell.find(doms[5]).on("click", cancel);
+        opts.closeBtn && cell.find(doms[5]).on("click", CloseFun);
         //最大化按钮
         opts.maxBtn && maxBtn.bind("click", function () {
             if (maxBtn.hasClass("revert")) {
@@ -248,22 +236,18 @@
             }
         });
         //更多按钮
-        that.button && cell.find(doms[4]+" button").on("click", function () {
+        btns && cell.find(doms[4]+" button").on("click", function () {
             var index = parseInt($(this).attr("jebtn"));
             if (index === 0) {
-                opts.yesfun ? opts.yesfun(that.index, cell) : jeBox.close(that.index);
+                btns[0]["callback"] ? btns[0]["callback"](that.index, cell) : jeBox.close(that.index, cell);
             }
-            if (that.button.length > 1) {
-                if (index === 1) {
-                    cancel();
-                }else if(index > 1) {
-                    that.button[index]["callback"] && that.button[index]["callback"](that.index, cell);
-                    that.button[index]["callback"] || jeBox.close(that.index);
-                }
+            if (btns.length > 1) {
+                var close = btns[index]["callback"] && btns[index]["callback"](that.index, cell);
+                close === false || jeBox.close(that.index);
             }
         });
         //点遮罩关闭
-        Jeb.isBool(opts.maskClose) && $("#jemask" + that.index).on("click", function () {
+        opts.maskClose && $("#jemask" + that.index).on("click", function () {
             jeBox.close(that.index);
         });
         //自适应
@@ -379,7 +363,7 @@
         });
     };
     //版本
-    jeBox.version = "1.2";
+    jeBox.version = "1.3";
     //改变当前弹层title
     jeBox.title = function (name, idx) {
         $("#" + doms[0] + idx).find(doms[2]).html(name);
@@ -402,17 +386,16 @@
             closeBtn: false,
             end: end
         }, !type && function () {
-            options = options || {};
-            return options;
-        }()));
+                options = options || {};
+                return options;
+            }()));
     };
     jeBox.alert = function (content, options, yes) {
         var type = $.isFunction(options);
         if (type) yes = options;
         return jeBox.open($.extend({
             content: content,
-            yesfun: yes,
-            yesBtn: "确定",
+            button:[{name: '确定', callback:yes}]
         }, type ? {} : options));
     };
     jeBox.loading = function (icon, content, options) {
@@ -470,5 +453,6 @@
     jeBox.iframeUrl = function (idx, url) {
         $("#" + doms[0] + idx).find("iframe").attr("src", url);
     };
+    // 多环境支持
     return jeBox;
 });
