@@ -45,6 +45,10 @@ background:rgba(0,0,0,.4); -ms-filter:progid:DXImageTransform.Microsoft.gradient
 .jeBox-loadbox.jeload2{background-image:url(icon/loading2.gif);background-position:center 5px;}
 .jeBox-loadbox.jeload3{background-image:url(icon/loading3.gif);background-position:center 5px;}
 
+.jeBox-tips{position: absolute;border-radius: 3px;}
+.jeBox-tips em{width:0;height:0;border:8px solid transparent;z-index:0;position:absolute;margin-left:0px;}
+.jeBox-tips .jeBox-tipscon{min-height:18px;line-height:18px;padding: 6px;font-size: 12px;z-index:5;position:relative;color: #fff;float: left;overflow: hidden;word-break:break-all;}
+
 .jeBox-wrap.jeBox-ies{border: 1px #c2c2c2 solid;}
 .jeBox-wrap.jeBox-anim{-webkit-box-shadow: 0 1px 5px 1px rgba(0,0,0,0.7);box-shadow: 0 1px 5px 1px rgba(0,0,0,0.7);-webkit-animation-name:bounceIn;animation-name:bounceIn;}
 .jeBox-wrap.jeBox-animMsg{background-color: rgba(0,0,0,0.65);color:#ffffff;-webkit-animation-name:bounceIn;animation-name:bounceIn;}

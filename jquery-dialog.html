@@ -1,0 +1,282 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>jeBox-演示页面</title>
+<link href="skin/default.css" rel="stylesheet" type="text/css">
+<style>
+*html{background-image:url(about:blank);background-attachment:fixed;}
+body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{margin: 0;padding: 0;border: 0;outline: 0;font-size: 100%;}
+body{font:12px/1.5 Arial,"\5b8b\4f53", sans-serif;-webkit-text-size-adjust:100%;color:#333333;background:white; }
+button,input,select,textarea{text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;-moz-font-feature-settings:"liga","kern";outline:none;-moz-outline:none;}
+.ces{ padding:20px 0 30px 20px;}
+.inpces{display:inline-block; margin:6px 8px 6px 0; height:32px; line-height:0; padding:0 20px; vertical-align:top; font-size:14px; -moz-border-radius:4px; -webkit-border-radius:4px; border-radius:4px;background:rgb(69,146,240);border:1px #3484e5 solid;color:#fff; text-decoration:none; cursor:pointer;}
+.bl{ display:none;}
+je-f0{font-size:0}          .je-f12{font-size:12px}           .je-f14{font-size:14px}           .je-f16{font-size:16px}
+.je-f18{font-size:18px}      .je-f20{font-size:20px}           .je-f22{font-size:22px}           .je-f24{font-size:24px}
+.je-f26{font-size:26px}      .je-f28{font-size:28px}           .je-f30{font-size:30px}
+/* display */
+.je-hide{display:none;}                   .je-show{display:block;}
+.je-din{display:inline;}                  .je-dib{display:inline-block;}
+/* float */
+.je-fl{ float:left;}                      .je-fr{ float:right;}
+/* position */
+.je-ovh{overflow:hidden;}                 .je-por{position:relative;}
+.je-poa{position:absolute;}               .je-pof{position:fixed;}
+/* text-align */
+.je-tc{text-align:center;}                .je-tr{text-align:right;}
+.je-tl{text-align:left;}                  .je-tj{text-align:justify;}
+</style>
+
+</head>
+
+<body style="padding: 25px">
+<div id="reader" class="je-tc je-f16">
+    <p>jeBox是一款备受青睐的web弹层组件，她具备全方位的解决方案，致力于服务各水平段的开发人员，您的页面会轻松地拥有丰富友好的操作体验。她不依赖任何的第三方库，纯原生JS开发的。<br/><span class="green b">您可以免费将她用于任何个人项目。但是不能去除头部信息。</span>  QQ群：516754269 </p><br>
+    <p><a href="http://www.jemui.com/uidoc/jebox.html" target="_blank">详细弹层API</a></p>
+</div>
+<div class="je-tc je-f14" style="padding: 50px;" id="yanshi">
+    <button class="inpces">初体验</button>
+    <button class="inpces">询问层</button>
+    <button class="inpces">提示层</button>
+    <button class="inpces">页面层</button>
+    <button class="inpces">捕获页</button>
+    <button class="inpces">iframe层</button>
+    <button class="inpces">iframe窗</button>
+    <button class="inpces">加载层</button>
+    <button class="inpces">loading层</button>
+    <button class="inpces demotip">tips层</button>
+</div>
+
+<div class="je-tc infor">
+    <button class="inpces">信息框-例1</button>
+    <button class="inpces">信息框-例2</button>
+    <button class="inpces">信息框-例3</button>
+    <button class="inpces">信息框-例4</button>
+</div>
+
+<div class="je-tc pageiframe">
+    <button class="inpces">页面层-自定义</button>
+    <button class="inpces" id="parentIframe">iframe-子父操作</button>
+    <button class="inpces">iframe-多媒体</button>
+    <button class="inpces">iframe-禁滚动条</button>
+</div>
+
+<div class="je-tc jeloading">
+    <button class="inpces">加载风格1</button>
+    <button class="inpces">加载风格2</button>
+    <button class="inpces">加载风格3</button>
+    <button class="inpces">加载风格4</button>
+</div>
+<script src="jquery-1.7.2.js" charset="utf-8"></script>
+<script src="jquery.jebox.js" charset="utf-8"></script>
+<script type="text/javascript">
+$(function () {
+    
+    $('#yanshi>button').on('click', function(){
+        var othis = $(this), index = othis.index();
+        switch(index){
+            case 0:
+                var icon = 1;
+                (function changeIcon(){
+                    var idxs = jeBox.alert('Hi，你好！ 点击确定更换图标', {
+                        icon: icon,
+                        maskClose: true,
+                        title: icon === 1 ? '初体验 - jeBox 1.0' : 'icon：'+icon + ' - jeBox 1.0'
+                    }, function(idx){
+                        jeBox.close(idx);
+                        changeIcon();
+                    });
+                    if(9 === ++icon) jeBox.close(idxs);
+                }());
+                break;
+            case 1:
+                jeBox.open({
+                    cell:"jbx",
+                    title:"你的选择",
+                    //boxSize:["400px","150px"],
+                    padding:"25px 10px",
+                    content:'<p style="text-align: center;">您是如何看待前端开发？</p>',
+                    maskLock : true ,
+                    btnAlign:"center",
+                    button:[
+                        {
+                            name: '重要',
+                            callback: function(index){
+                                jeBox.msg('的确很重要', {icon: 2,time:3});
+                                jeBox.close(index);
+                            }
+                        },
+                        {
+                            name: '奇葩',
+                            callback:function(){
+                                jeBox.msg('也可以这样认为', {icon: 1,time:3,button:[{name:"确定"},{name:"取消"}]});
+                            }
+                        },
+                        {
+                            name: '无效',
+                            disabled: true
+                        },
+                        {
+                            name: '关闭我'
+                        }
+                    ]
+                })
+                break;
+            case 2:
+                jeBox.msg('我就是要提示！', {icon: 2,time:3});
+                break;
+            case 3:
+                jeBox.open({
+                    boxSize:["400px","240px"],
+                    content:'<div style="padding:20px;">即直接给content传入html字符<br>当内容宽高超过定义宽高，会自动出现滚动条。<br><br><br><br><br><br><br><br><br><br><br>很高兴在下面遇见你</div>',
+                    maskLock : true
+                })
+                break;
+            case 4:
+                jeBox.open({
+                    boxSize:["400px","220px"],
+                    content: $("#reader"),
+                    maskLock : true
+                })
+                break;
+            case 5:
+                jeBox.open({
+                    title:"mBox mobile页",
+                    type:'iframe',
+                    padding:"0",
+                    boxSize:["450px","80%"],
+                    content: "http://www.jayui.com/mbox/",
+                    maskLock : true
+                })
+                break;
+            case 6:
+                jeBox.open({
+                    title:"很多时候，我们想最大化看，不显示滚动条",
+                    type:'iframe',
+                    maxBtn:true,
+                    padding:"0",
+                    boxSize:["90%","90%"],
+                    content: ["http://www.jayui.com/",'no'], //iframe的url，no代表不显示滚动条
+                    maskLock : true
+                })
+                break;
+            case 7:
+                var er = jeBox.loading(1,"玩命加载中");
+                setTimeout(function(){
+                    jeBox.close(er)
+                }, 5000);
+                break;
+            case 8:
+                var san = jeBox.loading(2,"Loading...");
+                setTimeout(function(){
+                    jeBox.close(san)
+                }, 5000);
+                break;
+            case 9:
+                jeBox.tips(".demotip","tip提示内容", {align:"right",time:3});
+                break;
+        }
+    })
+    $('.infor > button').on('click', function(){
+        var othis = $(this), index = othis.index();
+        switch(index){
+            case 0:
+                jeBox.alert('见到你真的很高兴', {icon: 7});
+                break;
+            case 1:
+                jeBox.msg('你确定你很帅么？', {
+                    time: 0 ,
+                    button: [
+                        {
+                            name: '必须啊',
+                            callback:function(index){
+                                jeBox.close(index);
+                                jeBox.msg('雅蠛蝶 O.o', { icon: 7 });
+                            }
+                        },{
+                            name: '丑到爆'
+                        }
+                    ],
+                    boxStyle:{background:"#333",  border:"1px solid #333", "border-radius":"4px", color:"#fff",opacity:"0.93", filter:"alpha(opacity=90)"}
+                });
+                break;
+            case 2:
+                jeBox.msg('这是最常用的吧');
+                break;
+            case 3:
+                jeBox.msg('不开心。。', {icon: 6});
+                break;
+        }
+    })
+    $('.pageiframe > button').on('click', function(){
+        var othis = $(this), index = othis.index();
+        switch(index){
+            case 0:
+                jeBox.open({
+                    title:false,
+                    closeBtn:false,
+                    maskClose:true,
+                    boxSize:["450px","250px"],
+                    content: "自定义HTML内容",
+                    boxStyle:{background:"#81BA25",  border:"1px solid #81BA25", "border-radius":"4px", color:"#fff"}
+                })
+                break;
+            case 1:
+                jeBox.open({
+                    type: 'iframe',
+                    boxSize: ['800px', '75%'],
+                    maxBtn: true,
+                    //scrollbar: false,
+                    content: 'jebox-iframe.html'
+                });
+                break;
+            case 2:
+                jeBox.open({
+                    title:false,
+                    closeBtn:false,
+                    type:'iframe',
+                    padding:"0",
+                    boxSize:['630px', '360px'],
+                    content: "http://player.youku.com/embed/XMTI4MTE1NTY0MA",
+                    maskClose:true
+                })
+                jeBox.msg('点击任意处关闭');
+                break;
+            case 3:
+                jeBox.open({
+                    title:"禁滚动条",
+                    type:'iframe',
+                    padding:"0",
+                    boxSize:["450px","80%"],
+                    content: ["http://www.jayui.com/mbox/","no"],
+                    maskLock : true
+                })
+                break;
+        }
+    })
+
+    $('.jeloading > button').on('click', function(){
+        var othis = $(this), index = othis.index();
+        switch(index){
+            case 0:
+                var one = jeBox.loading(1);
+                setTimeout(function(){
+                    jeBox.close(one)
+                }, 3000);
+                break;
+            case 1:
+                jeBox.loading(1,"玩命加载中",{time:3});
+                break;
+            case 2:
+                jeBox.loading(2,"加载中...",{time:3});
+                break;
+            case 3:
+                jeBox.loading(3,"Loading...",{time:3});
+                break;
+        }
+    })
+})
+</script>
+</body>
+</html>
