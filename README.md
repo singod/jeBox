@@ -12,3 +12,4 @@ jeBox是一款备受青睐的web弹层组件，她具备全方位的解决方案
 
 # 官网 与 API
 [官网（http://www.jayui.com/jebox/）](http://www.jayui.com/jebox/)
+[演示（http://arts1986.oschina.io/jebox/）](http://arts1986.oschina.io/jebox)
