@@ -9,3 +9,6 @@ jeBox是一款备受青睐的web弹层组件，她具备全方位的解决方案
 3. Chrome (Windows, Mac, Linux)
 4. Firefox (Windows, Mac, Linux)
 5. 谷歌内核(webkit)浏览器，如360浏览器，搜狗浏览器，QQ浏览器等
+
+# 官网 与 API
+[官网（http://www.jayui.com/jebox/）](http://www.jayui.com/jebox/)
