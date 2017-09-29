@@ -1,7 +1,7 @@
 /**
- @Name : jeBox v1.5 弹层组件
+ @Name : jeBox v1.6 弹层组件
  @Author: chen guojun
- @Date: 2017-06-26
+ @Date: 2017-09-29
  @QQ群：516754269
  @官网：http://www.jemui.com/jebox/ 或 https://github.com/singod/jeBox
  */
@@ -18,10 +18,7 @@
         ieBrowser = !-[1, ] ? parseInt(navigator.appVersion.split(";")[1].replace(/MSIE|[ ]/g, "")) : 9;
     //缓存常用字符
     var doms = ["jeBox", ".jeBox-wrap", ".jeBox-header", ".jeBox-content", ".jeBox-footer", ".jeBox-close", ".jeBox-maxbtn"];
-    var jeBox = {
-        version: "1.5",
-        jeidx: Math.floor(Math.random() * 9e3)
-    };
+    var random = Math.floor(Math.random() * 9e3);
     var jeDialog = function(options) {
         var that = this;
         var config = {
@@ -52,7 +49,7 @@
             endfun: null
         };
         that.config = $.extend({}, config, options);
-        that.jeidx = (that.config.cell == "" || that.config.cell == undefined) ? ++jeBox.jeidx : that.config.cell.replace(/[#.]/, "");
+        that.jeidx = (that.config.cell == "" || that.config.cell == undefined) ? ++random : that.config.cell.replace(/[#.]/, "");
         that.initView()
     };
     var jefn = jeDialog.prototype;
@@ -133,14 +130,14 @@
                     cell.find(doms[3]).append(msgCell);
                 }
                 cell.attr("jetype", opts.type);
-                that.setSize(cell);
-                that.setPosition(cell);
                 that.btnCallback(cell);
                 //是否可拖动
                 if (opts.isDrag) {
                     var wrapCell = cell, titCell = cell.find(doms[2]);
                     that.dragLayer(wrapCell, titCell, 0.4, opts.shadow);
                 };
+                that.setSize(cell);
+                that.setPosition(cell);
             });
         }
     };
@@ -223,8 +220,8 @@
                 wrapWidth = bfW + Padlr + Marlr;
                 conWidth = bfW;
             } else if (fixW == "auto") {
-                wrapWidth = cell.outerWidth(true) + Padlr + Marlr;
-                conWidth = cell.outerWidth(true);
+                conWidth = cell.width();
+                wrapWidth = conWidth + Padlr + Marlr;
             } else {
                 wrapWidth = nPerW;
                 conWidth = nPerW - Padlr - Marlr;
@@ -235,16 +232,16 @@
                 wrapHeight = bfH + Padtb + Martb;
                 conHeight = bfH - conhead - confoot;
             } else if (fixH == "auto") {
-                wrapHeight = cell.outerHeight(true);
-                conHeight = cell.outerHeight(true) - Padtb - Martb - conhead - confoot;
+                wrapHeight = cell.height();
+                conHeight = wrapHeight - Martb - conhead - confoot;
             } else {
                 wrapHeight = nPerH;
-                conHeight = nPerH - Padtb - Martb - conhead - confoot;
+                conHeight = nPerH - Martb - conhead - confoot;
             }
         }
         opts.maxBtn && cell.attr("area", [wrapWidth, wrapHeight, conWidth, conHeight]);
         cell.css({ "width": wrapWidth, height: wrapHeight }).css(opts.boxStyle);
-        cell.find(doms[3]).css({ "width": conWidth, "height": conHeight });
+        cell.find(doms[3]).css({ "height": conHeight });
     };
     //定位层显示的位置
     jefn.setPosition = function(cell) {
@@ -284,14 +281,13 @@
                 opts.success(cell, idx);
             }
         };
+        //自动关闭
+        times <= 0 || setTimeout(function () {
+            jeBox.close(idx);
+        }, times * 1e3);
         if (opts.type != "tips") {
             // 按钮队列
             if (!$.isArray(btns)) btns = btns ? [btns] : [];
-            //自动关闭
-            times <= 0 || setTimeout(function () {
-                jeBox.close(idx);
-            }, times * 1e3);
-
             //关闭按钮事件
             if (opts.closeBtn) {
                 cell.find(doms[5]).on("click", function () {
@@ -417,10 +413,11 @@
         //this.backInSitu = null;
     };
     //弹层核心
-    jeBox.open = function (opts) {
+    var jeBox = function (opts) {
         var jeShow = new jeDialog(opts || {});
         return jeShow.jeidx;
     };
+    jeBox.version = "1.6";
     //关闭指定层
     jeBox.close = function (idx) {
         var boxCell = $("#" + doms[0] + idx), maskCell = $("#jemask" + idx);
@@ -452,7 +449,7 @@
     jeBox.msg = function (content, options, end) {
         var type = $.isFunction(options);
         if (type) end = options;
-        return jeBox.open($.extend({
+        return jeBox($.extend({
             title: false,
             content: content,
             padding: "10px",
@@ -469,13 +466,13 @@
     jeBox.alert = function (content, options, yes) {
         var type = $.isFunction(options);
         if (type) yes = options;
-        return jeBox.open($.extend({
+        return jeBox($.extend({
             content: content,
             button:[{name: '确定', callback:yes}]
         }, type ? {} : options));
     };
     jeBox.loading = function (icon, content, options) {
-        return jeBox.open($.extend({
+        return jeBox($.extend({
             title: false,
             closeBtn: false,
             type: 'loading',
@@ -487,7 +484,7 @@
     };
     //tip提示泡泡
     jeBox.tips = function (cell,content,options) {
-        return jeBox.open( $.extend({
+        return jeBox( $.extend({
             cell: cell,
             type: 'tips',
             content: content == undefined ? "" : content,
