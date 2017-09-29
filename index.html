@@ -3,12 +3,10 @@
 <head>
 <meta charset="utf-8">
 <title>jeBox-演示页面</title>
-<link href="skin/default.css" rel="stylesheet" type="text/css">
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+<link href="skin/jebox.css" rel="stylesheet" type="text/css">
 <style>
-*html{background-image:url(about:blank);background-attachment:fixed;}
-body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{margin: 0;padding: 0;border: 0;outline: 0;font-size: 100%;}
-body{font:12px/1.5 Arial,"\5b8b\4f53", sans-serif;-webkit-text-size-adjust:100%;color:#333333;background:white; }
-button,input,select,textarea{text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;-moz-font-feature-settings:"liga","kern";outline:none;-moz-outline:none;}
+
 .ces{ padding:20px 0 30px 20px;}
 .inpces{display:inline-block; margin:6px 8px 6px 0; height:32px; line-height:0; padding:0 20px; vertical-align:top; font-size:14px; -moz-border-radius:4px; -webkit-border-radius:4px; border-radius:4px;background:rgb(69,146,240);border:1px #3484e5 solid;color:#fff; text-decoration:none; cursor:pointer;}
 .bl{ display:none;}
@@ -30,8 +28,8 @@ je-f0{font-size:0}          .je-f12{font-size:12px}           .je-f14{font-size:
 
 </head>
 
-<body style="padding: 25px">
-<div id="reader" class="je-tc je-f16">
+<body>
+<div id="reader" class="je-tc je-f16" style="padding: 25px">
     <p>jeBox是一款备受青睐的web弹层组件，她具备全方位的解决方案，致力于服务各水平段的开发人员，您的页面会轻松地拥有丰富友好的操作体验。她不依赖任何的第三方库，纯原生JS开发的。<br/><span class="green b">您可以免费将她用于任何个人项目。但是不能去除头部信息。</span>  QQ群：516754269 </p><br>
     <p><a href="http://www.jemui.com/uidoc/jebox.html" target="_blank">详细弹层API</a></p>
 </div>
@@ -91,7 +89,7 @@ $(function () {
                 }());
                 break;
             case 1:
-                jeBox.open({
+                jeBox({
                     cell:"jbx",
                     title:"你的选择",
                     //boxSize:["400px","150px"],
@@ -127,21 +125,21 @@ $(function () {
                 jeBox.msg('我就是要提示！', {icon: 2,time:3});
                 break;
             case 3:
-                jeBox.open({
+                jeBox({
                     boxSize:["400px","240px"],
                     content:'<div style="padding:20px;">即直接给content传入html字符<br>当内容宽高超过定义宽高，会自动出现滚动条。<br><br><br><br><br><br><br><br><br><br><br>很高兴在下面遇见你</div>',
                     maskLock : true
                 })
                 break;
             case 4:
-                jeBox.open({
+                jeBox({
                     boxSize:["400px","220px"],
                     content: $("#reader"),
                     maskLock : true
                 })
                 break;
             case 5:
-                jeBox.open({
+                jeBox({
                     title:"mBox mobile页",
                     type:'iframe',
                     padding:"0",
@@ -151,7 +149,7 @@ $(function () {
                 })
                 break;
             case 6:
-                jeBox.open({
+                jeBox({
                     title:"很多时候，我们想最大化看，不显示滚动条",
                     type:'iframe',
                     maxBtn:true,
@@ -213,7 +211,7 @@ $(function () {
         var othis = $(this), index = othis.index();
         switch(index){
             case 0:
-                jeBox.open({
+                jeBox({
                     title:false,
                     closeBtn:false,
                     maskClose:true,
@@ -223,7 +221,7 @@ $(function () {
                 })
                 break;
             case 1:
-                jeBox.open({
+                jeBox({
                     type: 'iframe',
                     boxSize: ['800px', '75%'],
                     maxBtn: true,
@@ -232,7 +230,7 @@ $(function () {
                 });
                 break;
             case 2:
-                jeBox.open({
+                jeBox({
                     title:false,
                     closeBtn:false,
                     type:'iframe',
@@ -244,7 +242,7 @@ $(function () {
                 jeBox.msg('点击任意处关闭');
                 break;
             case 3:
-                jeBox.open({
+                jeBox({
                     title:"禁滚动条",
                     type:'iframe',
                     padding:"0",
