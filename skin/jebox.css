@@ -2,6 +2,7 @@
 /* dialog ------------------------------------*/
 .jeBox{-webkit-background-clip: padding-box;background-clip: padding-box;display:inline-block; width:auto; height:auto;
 background:rgba(0,0,0,.4); -ms-filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#66000000,endColorstr=#66000000);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#66000000,endColorstr=#66000000);zoom: 1;}
+.jeBox *{margin: 0;padding: 0;list-style-type:none;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;font-style:normal;font-family:'PingFangSC-Light','PingFang SC','Segoe UI','Lucida Grande','NotoSansHans-Light','Microsoft YaHei', '\5FAE\8F6F\96C5\9ED1', STHeiti, 'WenQuanYi Micro Hei', SimSun, sans-serif;}
 .jeBox-wrap{display:inline-block;outline: 0;background-color:#ffffff; border-radius: 4px;font-family:'Avenir Next', Avenir, 'Helvetica Neue', Helvetica, 'Lantinghei SC', 'Hiragino Sans GB', 'Microsoft YaHei', '\5FAE\8F6F\96C5\9ED1', STHeiti, 'WenQuanYi Micro Hei', SimSun, sans-serif;-webkit-animation-fill-mode:both;animation-fill-mode:both;-webkit-animation-duration:.3s;animation-duration:.3s}
 .jeBox-header{height:40px;line-height:40px;padding:0 36px 0 10px;font-size:16px;background-color:#e6e6e6;border-bottom:1px solid #DDDDDD;color:#333;border-radius: 4px 4px 0 0;}
 .jeBox-content{ line-height:24px; word-break:break-all;font-size:14px; overflow:auto;}
